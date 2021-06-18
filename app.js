@@ -1,28 +1,65 @@
+const chalk = require("chalk");
+const notes = require("./notes");
+const yargs = require("yargs");
 
-const x = 1
-const y = 3
+yargs.command({
+  command: "add",
+  describe: "Adds a note",
+  builder: {
+    title: {
+      describe: "Note title",
+      demandOption: true,
+      type: "string",
+    },
+    body: {
+      describe: "Note body",
+      demandOption: true,
+      type: "string",
+    },
+  },
+  handler: (argv) => {
+    notes.addNote(argv.title, argv.body);
+  },
+});
 
-const obj = {x,y}
+yargs.command({
+  command: "remove",
+  describe: "Removes a note",
+  builder: {
+    title: {
+      discribe: "Note title to be removed",
+      demandOption: true,
+      type: "string",
+    },
+  },
+  handler: (argv) => {
+    notes.removeNote(argv.title);
+  },
+});
 
-console.log(`x = ${obj.x}, y = ${obj.y}`);
-swap(obj)
-console.log(`x = ${obj.x}, y = ${obj.y}`);
+yargs.command({
+  command: "list",
+  describe: "Lists notes",
+  handler: () => {
+    notes.listNotes();
+  },
+});
 
-function swap (values) {
-    let temp = values[Object.keys(values)[0]]
-    values[Object.keys(values)[0]] = values[Object.keys(values)[1]]
-    values[Object.keys(values)[1]] = temp
-}
+yargs.command({
+  command: "read",
+  describe: "Reads notes",
+  builder: {
+    title: {
+      discribe: "Note title to be read",
+      demandOption: true,
+      type: "string",
+    },
+  },
+  handler: (argv) => {
+    notes.readNote(argv.title);
+  },
+});
 
-// const chalk = require('chalk')
-// const { getNotes } = require('./notes');
+yargs.parse();
 
-// console.log(chalk.bold.inverse('success'));
-
-
-// console.log(getNotes());
-
-// const fs = require('fs');
-
-// fs.writeFileSync('notes.txt', 'This file was generated from node.');
-// fs.appendFileSync('notes.txt', '\rHello again!!!')
+// console.log(yargs.argv);
